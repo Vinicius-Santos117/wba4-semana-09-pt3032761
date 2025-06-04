@@ -119,50 +119,66 @@
     </footer>
 
     <script>
-        let slideIndex = 1;
-        showSlides(slideIndex);
-
-
-        function plusSlides(n) {
-            showSlides(slideIndex += n);
+document.addEventListener('DOMContentLoaded', function() {
+    let slideIndex = 0;
+    showSlides();
+    
+    function showSlides() {
+        let i;
+        let slides = document.getElementsByClassName("mySlides");
+        let dots = document.getElementsByClassName("dot");
+        
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";  
         }
-
-
-        function currentSlide(n) {
-            showSlides(slideIndex = n);
+        slideIndex++;
+        if (slideIndex > slides.length) {slideIndex = 1}    
+        
+        for (i = 0; i < dots.length; i++) {
+            dots[i].className = dots[i].className.replace(" active", "");
         }
+        
+        slides[slideIndex-1].style.display = "block";  
+        dots[slideIndex-1].className += " active";
+        
+        setTimeout(showSlides, 5000);
+    }
 
-        function showSlides(n) {
-            let i;
-            let slides = document.getElementsByClassName("mySlides");
-            let dots = document.getElementsByClassName("dot");
-            if (n > slides.length) {slideIndex = 1}
-            if (n < 1) {slideIndex = slides.length}
-            for (i = 0; i < slides.length; i++) {
-                slides[i].style.display = "none";
-            }
-            for (i = 0; i < dots.length; i++) {
-                dots[i].className = dots[i].className.replace(" active", "");
-            }
-            slides[slideIndex-1].style.display = "block";
-            dots[slideIndex-1].className += " active";
-        }
+    function plusSlides(n) {
+        slideIndex += n;
+        let slides = document.getElementsByClassName("mySlides");
+        if (slideIndex > slides.length) {slideIndex = 1}
+        if (slideIndex < 1) {slideIndex = slides.length}
+        showSlides();
+    }
 
-   
-        let slideInterval = setInterval(() => {
+    function currentSlide(n) {
+        slideIndex = n;
+        showSlides();
+    }
+
+    const prevButtons = document.getElementsByClassName("prev");
+    const nextButtons = document.getElementsByClassName("next");
+    const dotButtons = document.getElementsByClassName("dot");
+    
+    for (let i = 0; i < prevButtons.length; i++) {
+        prevButtons[i].addEventListener('click', function() {
+            plusSlides(-1);
+        });
+    }
+    
+    for (let i = 0; i < nextButtons.length; i++) {
+        nextButtons[i].addEventListener('click', function() {
             plusSlides(1);
-        }, 5000);
-
-
-        const slideshowContainer = document.querySelector('.slideshow-container');
-        slideshowContainer.addEventListener('mouseenter', () => {
-            clearInterval(slideInterval);
         });
-        slideshowContainer.addEventListener('mouseleave', () => {
-            slideInterval = setInterval(() => {
-                plusSlides(1);
-            }, 5000);
+    }
+    
+    for (let i = 0; i < dotButtons.length; i++) {
+        dotButtons[i].addEventListener('click', function() {
+            currentSlide(i+1);
         });
+    }
+});
     </script>
 </body>
 </html>
